@@ -1,0 +1,13 @@
+- docker run "some_container" - запуск контейнера
+- docker run -it "some_container" - запуск контейнера и доступ к bash
+- docker rm @id - удалить контейнер
+- docker rm -v $(docker ps -aq -f status=exited) - удалить все контейнеры
+- docker ps - просмотр всех запущенных контейнеров
+- docker ps -a - просмотр запущенных когда-либо контейнеров
+
+- docker run -d -p 8000:80 nginx - запустить nginx в контейнере и перекинуть его порт на 8000
+- ID=$(docker run -d -P nginx) && docker port $ID 80 - запустить nginx в контейнере на случайном порте, присвоеном 
+- pwd - выводит путь текущей рабочей директории
+
+- docker run -d -p 5001:5000 -v "$(pwd)"/app:/app identidock 
+
