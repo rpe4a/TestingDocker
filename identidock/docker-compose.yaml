@@ -6,3 +6,8 @@ identidock: #Имя создаваемого контейнера
     ENV: DEV
   volumes: #Монтирование папки хоста для контейнера
     - ./app:/app
+  links: #устанавливает связь с контейнерами
+    - dnmonster
+
+dnmonster:
+  image: amouat/dnmonster
