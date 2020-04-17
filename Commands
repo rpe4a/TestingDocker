@@ -11,3 +11,7 @@
 
 - docker run -d -p 5001:5000 -v "$(pwd)"/app:/app identidock 
 
+- docker login -u "rpe4a" -p "mypassword" docker.io - авторизация на DockerHub
+- docker tag identidock:latest rpe4a/identidock:0.1 - создаем образ для отправки на DockerHub
+- docker push rpe4a/identidock:0.1 - отправляем образ на DockerHub
+
