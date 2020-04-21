@@ -1,0 +1,15 @@
+identidock: #Имя создаваемого контейнера
+  build: . #Каталог расположения Dockerfile
+  expose: 
+    - "9090"
+  environment: #Перемсенные окружения внутри контейнера
+    ENV: PROD
+  links: #устанавливает связь с контейнерами
+    - dnmonster
+    - redis
+
+dnmonster:
+  image: amouat/dnmonster
+
+redis:
+  image: redis
