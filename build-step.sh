@@ -5,16 +5,17 @@ sudo docker-compose $COMPOSE_ARGS stop
 sudo docker-compose $COMPOSE_ARGS rm --force -v
 # Создание (сборка) системы
 sudo docker-compose $COMPOSE_ARGS build --no-cache
-sudo docker-compose $COMPOSE_ARGS up -d
 # Выполнение модульного тестирования
-sudo docker-compose $COMPOSE_ARGS run --no-deps --rm -e ENV=UNIT identidock
+sudo docker-compose $COMPOSE_ARGS run --no-deps --rm -e ENV=UNIT identidock #берем наш собранный образ  и запускаем только одинокий(т.к. --no-deps) контейнер identidock с переменной окржения UNIT и  
+# Выполнение тестирования системы в целом, если модульное тестирование завершилось успешно
 ERR=$? #код завершения последней операции
 
-# Выполнение тестирования системы в целом, если модульное тестирование завершилось успешно
 if [ $ERR -eq 0 ]; then
+	#Запуск продакш сборки identidock
+	sudo docker-compose $COMPOSE_ARGS up -d
+    
     IP=$(
-        sudo docker inspect -f {{.NetworkSettings.IPAddress}}
-        jenkins_identidock_1
+        sudo docker inspect -f {{.NetworkSettings.IPAddress}} jenkins_identidock_1
     )
     CODE=$(curl -sL -w "%{http_code}" $IP:9090/monster/bla -o /dev/null) || true
     #вывод в файл /dev/null - говорит о том что нам не важен вывод операции и мы грубо говря хотим его удалить
