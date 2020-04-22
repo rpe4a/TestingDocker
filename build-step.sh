@@ -1,5 +1,5 @@
 # Аргументы для Compose, определяемые по умолчанию
-COMPOSE_ARGS=" -f docker-compose-jenkins.yml -p jenkins "
+COMPOSE_ARGS=" -f identidock/docker-compose-jenkins.yml -p jenkins "
 # Необходимо остановить и удалить все старые контейнеры
 sudo docker-compose $COMPOSE_ARGS stop
 sudo docker-compose $COMPOSE_ARGS rm --force -v
