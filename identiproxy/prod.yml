@@ -1,0 +1,24 @@
+proxy:
+  build: .
+  links:
+    - identidock
+  ports:
+    - "80:80"
+  environment:
+    - NGINX_HOST=46.146.181.99 
+    - NGINX_PROXY=http://identidock:9090
+
+identidock:
+  build: ../identidock/
+  links:
+    - dnmonster
+    - redis
+  environment:
+    ENV: PROD
+
+dnmonster:
+  image: amouat/dnmonster
+
+redis:
+  image: redis
+
