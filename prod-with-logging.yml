@@ -1,0 +1,47 @@
+proxy:
+  build: identiproxy/
+  links:
+    - identidock
+  ports:
+    - "80:80"
+  environment:
+    - NGINX_HOST=46.146.181.99 
+    - NGINX_PROXY=http://identidock:9090
+
+identidock:
+  build: identidock/
+  links:
+    - dnmonster
+    - redis
+  environment:
+    ENV: PROD
+
+dnmonster:
+  image: amouat/dnmonster
+
+redis:
+  image: redis
+
+logspout:
+  image: amouat/logspout-logstash
+  volumes:
+    - /var/run/docker.sock:/tmp/docker.sock #Монтирование Docker-сокета, для того чтобы Logspout мог установить соединение с Docker API
+  ports:
+    - "8010:80"
+  links:
+    - logstash
+  command: logstash://logstash:5000
+
+logstash:
+  image: logstash:6.8.8
+  volumes:
+    - ./logstash.conf:/etc/logstash.conf
+  environment:
+    LOGSPOUT: ignore
+  command: logstash -f /etc/logstash.conf
+
+
+
+#docker-compose -f prod-with-logging.yml -p proxy build
+#docker-compose -f prod-with-logging.yml -p proxy up -d
+#docker-compose -f prod-with-logging.yml -p proxy stop
