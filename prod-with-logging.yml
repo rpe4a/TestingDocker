@@ -5,7 +5,7 @@ proxy:
   ports:
     - "80:80"
   environment:
-    - NGINX_HOST=46.146.181.99 
+    - NGINX_HOST=46.146.181.99
     - NGINX_PROXY=http://identidock:9090
 
 identidock:
@@ -24,10 +24,9 @@ redis:
 
 logspout:
   image: amouat/logspout-logstash
+  restart: always
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock #Монтирование Docker-сокета, для того чтобы Logspout мог установить соединение с Docker API
-  ports:
-    - "8010:80"
   links:
     - logstash
   command: logstash://logstash:5000
@@ -38,9 +37,24 @@ logstash:
     - ./logstash.conf:/etc/logstash.conf
   environment:
     LOGSPOUT: ignore
-  command: logstash -f /etc/logstash.conf
+  links:
+    - elasticsearch
+  command: -f /etc/logstash.conf
 
+elasticsearch:
+  image: elasticsearch:6.8.8
+  environment:
+    LOGSPOUT: ignore
 
+kibana:
+  image: kibana:6.8.8
+  environment:
+    LOGSPOUT: ignore
+    ELASTICSEARCH_URL: http://elasticsearch:9200
+  links:
+    - elasticsearch
+  ports:
+    - "5601:5601"
 
 #docker-compose -f prod-with-logging.yml -p proxy build
 #docker-compose -f prod-with-logging.yml -p proxy up -d
