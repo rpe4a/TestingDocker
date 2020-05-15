@@ -56,6 +56,11 @@ kibana:
   ports:
     - "5601:5601"
 
+#sudo sysctl -w vm.max_map_count=262144
 #docker-compose -f prod-with-logging.yml -p proxy build
 #docker-compose -f prod-with-logging.yml -p proxy up -d
 #docker-compose -f prod-with-logging.yml -p proxy stop
+
+#docker run -d --name cadvisor -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker/:/var/lib/docker:ro -p 8080:8080 google/cadvisor:latest
+#docker run -d --name prometheus -p 9090:9090 -v $(pwd)/prometheus.conf:/prometheus.conf --link cadvisor:cadvisor prom/prometheus --config.file=/prometheus.conf
+#filter fro prometheus sum(container_cpu_usage_seconds_total{name=~"proxy.*"}) by (name)
